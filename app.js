@@ -31,7 +31,7 @@ const missoes = [
  *@openapi
  * /missoes/{id}:
  *   get: 
- *     sumary: Buscar missao por um missao pelo id 
+ *     summary: Buscar missao por um missao pelo id 
  *     parameters:
  *       - in: path 
  *         name: id 
