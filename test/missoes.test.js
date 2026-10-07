@@ -15,7 +15,6 @@ test("POST/missoes cria uma nova missao " , async () => {
     expect(resposta.status).toBe(201);
     expect(resposta.body.nome).toBe("Apollo 11");
 });
-
 test("PUT/missoes/:id altera uma missao", async () => {
     const resposta = await request(app).put("/missoes/1").send({ nome: "Apollo 11", agencia: "NASA", ano : 1969 })
     expect(resposta.status).toBe(200)

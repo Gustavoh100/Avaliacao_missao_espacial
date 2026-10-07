@@ -56,7 +56,7 @@ app.get('/missoes/:id', (req, res) => {
  *@openapi
  * /missoes:
  *   post: 
- *     sumary: Criado com sucesso
+ *     summary: Criado uma nova
  *     requestBody:
  *       required: true 
  *       contente:
@@ -66,6 +66,7 @@ app.get('/missoes/:id', (req, res) => {
  *             required: 
  *               - nome
  *               - agencia 
+ *               - ano
  *             properties:
  *               nome: 
  *                 type: string 
@@ -74,10 +75,10 @@ app.get('/missoes/:id', (req, res) => {
  *               ano:
  *                 type: integer
  *     responses:
- *       204:
- *         description : missao criado
- *       404:
- *         description: Missoes não criado
+ *       201:
+ *         description : missao criada
+ *       400:
+ *         description: Missoes não criada
 */
 app.post('/missoes', (req, res) => {
     const nome = req?.body?.nome || null
