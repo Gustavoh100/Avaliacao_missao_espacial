@@ -1,141 +1,165 @@
 # Avaliacao_missao_espacial
 
-// livros.test.js
-import request from "supertest";
-import app from "../app.js";
+Nome: Gustavo Henrique Cabral da Silva 
+Curso: Informatica para internet 
+unidade Curricular: Desenvolvimento Web 
+
+Uma Api que cadastra uma missao espacial , com algumas caracteristicas , nome da missao , ano e agencia . 
+
+# tecnologias utilizadas 
+
+Node.js
+Express
+jest 
+Supertest 
+Swagger 
+Json
+
+
+# como clonar repositorio 
+
+git clone Avaliacao_missao_espacial
+
+cd Avaliacao_missao_espacial
+
+# como instalar depedencias 
+
+`npm i` e o nome das depedencias 
+
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.5.2",
+    "supertest": "^7.3.1"
+  }
+
+## como iniciar 
+
+inicie utilizando npm start 
+URL - Base http://localhost:3000
+Swagger - http://localhost:3000/docs
+
+##  
+
+`npm run test`
+
+os testes irao ver se nossos endepoints estão funcionando .
+
+
+
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+
+
+## Buscar uma missao pelo um id 
+
+Get
+/missoes/id
+Retornar uma missao pelo id
+exemplo de requisição: GET http://localhost:3000/missoes/id
+exemplo de resposta :  
+  {
+        id: 1,
+        nome: "Apollo 11",
+        ano: 1969,
+        agencia: "NASA"
+    },
+status : 200 sucesso e 404 missao não encontrada 
+
+
+## Buscar todas as missões
  
-test("POST /livros cria um novo livro", async () => {
-  const resposta = await request(app).post("/livros")
-    .send({ titulo: "Drácula", autor: " Bram Stoker" });
- 
-  expect(resposta.status).toBe(201);
-  expect(resposta.body.titulo).toBe("Drácula");
-});
- 
-test("POST /livros retorna erro ao não informar o autor", async () => {
-  const resposta = await request(app).post("/livros")
-    .send({ titulo: "Drácula" });
- 
-  expect(resposta.status).toBe(400);
-  expect(resposta.body.error).toBe("Autor é obrigatório");
-});
- 
- 
-test("GET /livros  filtra livros pelo título", async () => {
-  const resposta = await request(app).get("/livros")
-    .send("titulo=escaravelho");
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body[0].titulo).toBe("O escaravelho do diabo");
-});
- 
-test("GET /livros dois livros já cadastrados", async () => {
-  const resposta = await request(app).get("/livros")
-    .send();
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body.length).toBe(3);
-});
- 
-test("GET /livros filtra por título sem diferenciar maiúsculas", async () => {
-  const resposta = await request(app).get("/livros")
-    .query({ titulo: "DRÁCULA" });
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body).toHaveLength(1);
-  expect(resposta.body[0].titulo).toBe("Drácula");
-});
- 
-test("GET /livros retorna lista vazia quando não encontra o título", async () => {
-  const resposta = await request(app).get("/livros")
-    .query({ titulo: "livro inexistente" });
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body).toEqual([]);
-});
- 
-test("GET /livros/:id retorna o livro encontrado", async () => {
-  const resposta = await request(app).get("/livros/1");
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body.id).toBe(1);
-});
- 
-test("GET /livros/:id retorna erro quando o livro não existe", async () => {
-  const resposta = await request(app).get("/livros/999");
- 
-  expect(resposta.status).toBe(404);
-  expect(resposta.body).toEqual({ error: "livro não encontrado" });
-});
- 
-test("POST /livros retorna erro quando o título não é informado", async () => {
-  const resposta = await request(app).post("/livros")
-    .send({ autor: "Autor sem título" });
- 
-  expect(resposta.status).toBe(400);
-  expect(resposta.body.error).toBe("Título é obrigatório");
-});
- 
-test("POST /livros aceita disponibilidade informada", async () => {
-  const resposta = await request(app).post("/livros")
-    .send({ titulo: "Livro disponível", autor: "Autor", disponivel: true });
- 
-  expect(resposta.status).toBe(201);
-  expect(resposta.body.disponviel).toBe(true);
-});
- 
-test("POST /livros usa indisponibilidade quando ela não é informada", async () => {
-  const resposta = await request(app).post("/livros")
-    .send({ titulo: "Livro sem disponibilidade", autor: "Autor", disponivel: false });
- 
-  expect(resposta.status).toBe(201);
-  expect(resposta.body.disponviel).toBe(false);
-});
- 
-test("PUT /livros/:id atualiza os campos informados", async () => {
-  const resposta = await request(app).put("/livros/1")
-    .send({ titulo: "Título atualizado", autor: "Novo autor", disponivel: true });
- 
-  expect(resposta.status).toBe(200);
-  expect(resposta.body).toMatchObject({
+Get
+/missoes
+Retornar todas as missões. Pode filtrar por nome, agencia ou ano
+exemplo de requisição: GET http://localhost:3000/missoes
+exemplo de requisição com filtro: GET http://localhost:3000/missoes?nome=Apollo
+exemplo de resposta :
+[
+  {
     id: 1,
-    titulo: "Título atualizado",
-    autor: "Novo autor",
-    disponivel: true
-  });
-});
+    nome: "Apollo 11",
+    ano: 1969,
+    agencia: "NASA"
+  },
+  {
+    id: 2,
+    nome: "Voyager 1",
+    ano: 1977,
+    agencia: "NASA"
+  }
+]
+status : 200 sucesso
  
-test("PUT /livros/:id preserva os campos quando recebem valores vazios ou falsos", async () => {
-  const resposta = await request(app).put("/livros/1")
-    .send({ titulo: "", autor: "", disponivel: false });
+## Criar uma missão
  
-  expect(resposta.status).toBe(200);
-  expect(resposta.body).toMatchObject({
-    titulo: "Título atualizado",
-    autor: "Novo autor",
-    disponivel: true
-  });
-});
+Post
+/missoes
+Cria uma nova missão
+exemplo de requisição: POST http://localhost:3000/missoes
+exemplo de body :
+{
+  nome: "Apollo 11",
+  ano: 1969,
+  agencia: "NASA"
+}
+exemplo de resposta :
+{
+  id: 3,
+  nome: "Apollo 11",
+  ano: 1969,
+  agencia: "NASA"
+}
+status : 201 criada com sucesso e 400 dados inválidos
  
-test("PUT /livros/:id retorna erro quando o livro não existe", async () => {
-  const resposta = await request(app).put("/livros/999")
-    .send({ titulo: "Título" });
+## Atualizar uma missão
  
-  expect(resposta.status).toBe(404);
-  expect(resposta.body).toEqual({ error: "Livro não encontrado" });
-});
+Put
+/missoes/id
+Atualizar uma missão pelo id
+exemplo de requisição: PUT http://localhost:3000/missoes/1
+exemplo de body :
+{
+  nome: "Apollo 12",
+  ano: 1969,
+  agencia: "NASA"
+}
+exemplo de resposta :
+{
+  id: 1,
+  nome: "Apollo 12",
+  ano: 1969,
+  agencia: "NASA"
+}
+status : 200 sucesso e 404 missão não encontrada
  
-test("DELETE /livros/:id remove o livro encontrado", async () => {
-  const resposta = await request(app).delete("/livros/4");
+## Deletar uma missão
  
-  expect(resposta.status).toBe(204);
-  expect(resposta.body).toEqual({});
-});
+Delete
+/missoes/id
+Deletar uma missão pelo id
+exemplo de requisição: DELETE http://localhost:3000/missoes/1
+exemplo de resposta :
+{
+  mensagem: "Missão deletada com sucesso"
+}
+status : 200 sucesso e 404 missão não encontrada
  
-test("DELETE /livros/:id retorna erro quando o livro não existe", async () => {
-  const resposta = await request(app).delete("/livros/999");
- 
-  expect(resposta.status).toBe(404);
-  expect(resposta.body).toEqual({ error: "Livro não encontrado" });
-});
- 
+
+
+
+
+
+
+
+
+
+
+
+

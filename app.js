@@ -12,18 +12,18 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 const missoes = [
-{
-    id: 1 , 
-    nome: "Apollo 11",
-    ano: 1969,
-    agencia: "NASA"
-},
-{
-    id: 1 , 
-    nome: "Voyager",
-    ano: 1977,
-    agencia: "NASA"
-},
+    {
+        id: 1,
+        nome: "Apollo 11",
+        ano: 1969,
+        agencia: "NASA"
+    },
+    {
+        id: 2,
+        nome: "Voyager",
+        ano: 1977,
+        agencia: "NASA"
+    },
 ]
 
 
@@ -52,34 +52,70 @@ app.get('/missoes/:id', (req, res) => {
     res.status(200).json(missao);
 })
 
-/** 
- *@openapi
+
+
+/**
+* @openapi
+* /missoes:
+*   get:
+*     summary: Retorna todas as missões ou filtra por query
+*     parameters:
+*       - in: query
+*         name: nome
+*         schema: { type: string }
+*       - in: query
+*         name: agencia
+*         schema: { type: string }
+*       - in: query
+*         name: ano
+*         schema: { type: integer }
+*     responses:
+*       200:
+*         description: Lista de missões
+*/
+
+app.get('/missoes', (req, res) => {
+    const { nome, agencia, ano } = req.query
+
+    if (nome || agencia || ano) {
+        const missoesFiltradas = missoes.filter(item => item.nome.toLowerCase().includes(nome.toLowerCase()) || item.agencia.toLowerCase().includes(agencia.toLowerCase()) || item.ano.toLowerCase().includes(ano.toLowerCase()))
+        res.status(200).json(missoesFiltradas)
+    } else {
+        res.status(200).json(missoes)
+    }
+
+})
+
+
+
+/**
+ * @openapi
  * /missoes:
- *   post: 
- *     summary: Criado uma nova
+ *   post:
+ *     summary: Cria uma nova missão
  *     requestBody:
- *       required: true 
- *       contente:
+ *       required: true
+ *       content:
  *         application/json:
  *           schema:
- *             type: object 
- *             required: 
+ *             type: object
+ *             required:
  *               - nome
- *               - agencia 
+ *               - agencia
  *               - ano
  *             properties:
- *               nome: 
- *                 type: string 
+ *               nome:
+ *                 type: string
  *               agencia:
  *                 type: string
  *               ano:
  *                 type: integer
  *     responses:
- *       201:
- *         description : missao criada
- *       400:
- *         description: Missoes não criada
-*/
+ *       '201':
+ *         description: Missão criada
+ *       '400':
+ *         description: Missão não criada
+ */
 app.post('/missoes', (req, res) => {
     const nome = req?.body?.nome || null
     const agencia = req?.body?.agencia || null
@@ -90,7 +126,7 @@ app.post('/missoes', (req, res) => {
     if (!nome) {
         res.status(400).json({ error: ' nome  é obrigatorio ' })
     }
-     if (!ano) {
+    if (!ano) {
         res.status(400).json({ error: ' ano é obrigatorio ' })
     }
     const novoMissoes = {
@@ -173,11 +209,11 @@ app.put('/missoes/:id', (req, res) => {
  *       404:
  *         description: Missoes não encontrado
  */
-app.delete('/missoes/:id', (req, res) =>{
+app.delete('/missoes/:id', (req, res) => {
     const id = Number(req.params.id);
     const indice = missoes.findIndex(item => item.id === id)
 
-    if(indice === -1){
+    if (indice === -1) {
         return res.status(404).json({ error: "Missao não encontrada" })
     }
 
